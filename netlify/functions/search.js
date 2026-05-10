@@ -101,7 +101,7 @@ Return ONLY a raw JSON array. Each object must have:
 - "price": number only, realistic estimate
 - "unit": e.g. "12-pack", "per bottle"
 - "inStock": true or false based on your best knowledge
-- "note": always include "Estimated price — click to search this store"
+- "note": always include "Price may vary — click to verify"
 
 Return 6-12 results. Return ONLY the JSON array, no markdown.`;
 
