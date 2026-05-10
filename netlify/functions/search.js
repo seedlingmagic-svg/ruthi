@@ -47,6 +47,13 @@ exports.handler = async function(event) {
   'Wild Fork': `https://wildforkfoods.com/search?q=${encodedQuery}`,
   'Restaurant Depot': `https://www.restaurantdepot.com/search?q=${encodedQuery}`,
   '99 Ranch': `https://www.99ranch.com/search?q=${encodedQuery}`,
+  'Georgetown Market': `https://www.instacart.com/store/georgetown/storefront`,
+  'Harvest Market': `https://www.goharvestmarket.com/search?q=${encodedQuery}`,
+  'The Fresh Market': `https://www.thefreshmarket.com/search?q=${encodedQuery}`,
+  'Meijer': `https://www.meijer.com/shopping/search.html?text=${encodedQuery}`,
+  'Fresh Thyme': `https://www.freshthyme.com/search?q=${encodedQuery}`,
+  'Market District': `https://www.marketdistrict.com/search?q=${encodedQuery}`,
+  'Sur La Table': `https://www.surlatable.com/search?q=${encodedQuery}`,    
 };
 
     const priceInstruction = maxPrice ? `Only include results priced under $${maxPrice}.` : '';
