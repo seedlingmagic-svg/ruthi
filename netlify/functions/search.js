@@ -53,7 +53,8 @@ exports.handler = async function(event) {
   'Meijer': `https://www.meijer.com/shopping/search.html?text=${encodedQuery}`,
   'Fresh Thyme': `https://www.freshthyme.com/search?q=${encodedQuery}`,
   'Market District': `https://www.marketdistrict.com/search?q=${encodedQuery}`,
-  'Sur La Table': `https://www.surlatable.com/search?q=${encodedQuery}`,    
+  'Sur La Table': `https://www.surlatable.com/search?q=${encodedQuery}`, 
+  'Foot Locker': `https://www.footlocker.com/search?q=${encodedQuery}`,    
    };
 
     const priceInstruction = maxPrice ? `Only include results priced under $${maxPrice}.` : '';
