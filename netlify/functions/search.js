@@ -10,14 +10,44 @@ exports.handler = async function(event) {
 
     const encodedQuery = encodeURIComponent(query);
     const storeLinks = {
-      'Amazon': `https://www.amazon.com/s?k=${encodedQuery}`,
-      'Walmart': `https://www.walmart.com/search?q=${encodedQuery}`,
-      'Target': `https://www.target.com/s?searchTerm=${encodedQuery}`,
-      'Whole Foods': `https://www.wholefoodsmarket.com/search?text=${encodedQuery}`,
-      'Sprouts': `https://www.sprouts.com/search/?q=${encodedQuery}`,
-      'Costco': `https://www.costco.com/CatalogSearch?keyword=${encodedQuery}`,
-      'eBay': `https://www.ebay.com/sch/i.html?_nkw=${encodedQuery}`,
-    };
+  'Amazon': `https://www.amazon.com/s?k=${encodedQuery}`,
+  'Walmart': `https://www.walmart.com/search?q=${encodedQuery}`,
+  'Target': `https://www.target.com/s?searchTerm=${encodedQuery}`,
+  'Whole Foods': `https://www.wholefoodsmarket.com/search?text=${encodedQuery}`,
+  'Sprouts': `https://www.sprouts.com/search/?q=${encodedQuery}`,
+  'Costco': `https://www.costco.com/CatalogSearch?keyword=${encodedQuery}`,
+  'eBay': `https://www.ebay.com/sch/i.html?_nkw=${encodedQuery}`,
+  'HEB': `https://www.heb.com/search/?q=${encodedQuery}`,
+  'Kroger': `https://www.kroger.com/search?query=${encodedQuery}`,
+  'Randalls': `https://www.randalls.com/search?q=${encodedQuery}`,
+  'Central Market': `https://www.centralmarket.com/search?q=${encodedQuery}`,
+  'Sams Club': `https://www.samsclub.com/s/${encodedQuery}`,
+  'Walgreens': `https://www.walgreens.com/search/results.jsp?Ntt=${encodedQuery}`,
+  'CVS': `https://www.cvs.com/search/${encodedQuery}`,
+  'Dollar Tree': `https://www.dollartree.com/search?q=${encodedQuery}`,
+  'Family Dollar': `https://www.familydollar.com/search?q=${encodedQuery}`,
+  'Best Buy': `https://www.bestbuy.com/site/searchpage.jsp?st=${encodedQuery}`,
+  'Staples': `https://www.staples.com/search?query=${encodedQuery}`,
+  'Office Depot': `https://www.officedepot.com/catalog/search.do?Ntt=${encodedQuery}`,
+  'Home Depot': `https://www.homedepot.com/s/${encodedQuery}`,
+  'Lowes': `https://www.lowes.com/search?searchTerm=${encodedQuery}`,
+  'Kohls': `https://www.kohls.com/search/submit.jsp?search=${encodedQuery}`,
+  'Dillards': `https://www.dillards.com/search?q=${encodedQuery}`,
+  'Michaels': `https://www.michaels.com/search?q=${encodedQuery}`,
+  'Dicks Sporting Goods': `https://www.dickssportinggoods.com/search?q=${encodedQuery}`,
+  'At Home': `https://www.athome.com/search?q=${encodedQuery}`,
+  'Container Store': `https://www.containerstore.com/search?q=${encodedQuery}`,
+  'Vitamin Shoppe': `https://www.vitaminshoppe.com/search?q=${encodedQuery}`,
+  'Camping World': `https://www.campingworld.com/search?q=${encodedQuery}`,
+  'Finish Line': `https://www.finishline.com/store/search?query=${encodedQuery}`,
+  'Specs': `https://www.specsonline.com/search?q=${encodedQuery}`,
+  'HMart': `https://www.hmart.com/search?q=${encodedQuery}`,
+  'Fiesta Market': `https://www.fiestamartllc.com/search?q=${encodedQuery}`,
+  'El Rancho': `https://www.elranchosupermercado.com/search?q=${encodedQuery}`,
+  'Wild Fork': `https://wildforkfoods.com/search?q=${encodedQuery}`,
+  'Restaurant Depot': `https://www.restaurantdepot.com/search?q=${encodedQuery}`,
+  '99 Ranch': `https://www.99ranch.com/search?q=${encodedQuery}`,
+};
 
     const priceInstruction = maxPrice ? `Only include results priced under $${maxPrice}.` : '';
     const sortInstruction = sortBy === 'price'
@@ -26,7 +56,7 @@ exports.handler = async function(event) {
 
     const prompt = `You are a price comparison assistant. The user is searching for: "${query}".
 
-Provide estimated prices for this product at these specific retailers: Amazon, Walmart, Target, Whole Foods, Sprouts, Costco, and eBay.
+Provide estimated prices for this product at the most relevant retailers from this list: Amazon, Walmart, Target, HEB, Kroger, Sprouts, Whole Foods, Central Market, Costco, Sams Club, Best Buy, Home Depot, Lowes, CVS, Walgreens, Dollar Tree, Dicks Sporting Goods, Michaels, Kohls, Vitamin Shoppe, eBay, and other relevant stores from the list. Only include stores that would realistically carry the searched product.
 
 ${priceInstruction}
 ${sortInstruction}
