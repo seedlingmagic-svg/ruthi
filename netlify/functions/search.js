@@ -90,7 +90,7 @@ exports.handler = async function(event) {
 
     const prompt = `You are a price comparison assistant. The user is searching for: "${query}".
 
-Provide estimated prices for this product at the most relevant retailers from this list: Amazon, Walmart, Target, HEB, Kroger, Sprouts, Whole Foods, Central Market, Costco, Sams Club, Best Buy, Home Depot, Lowes, CVS, Walgreens, Dollar Tree, Dicks Sporting Goods, Michaels, Kohls, Vitamin Shoppe, eBay, and other relevant stores from the list. Only include stores that very likely carry this specific product based on their known inventory. Do not include a store if there is reasonable doubt they carry it. Fewer accurate results are better than more inaccurate ones.
+Provide estimated prices for this product at the most relevant retailers from this list: Amazon, Walmart, Target, HEB, Kroger, Sprouts, Whole Foods, Central Market, Costco, Sams Club, Best Buy, Staples, Office Depot, Home Depot, Lowes, CVS, Walgreens, Dollar Tree, Dicks Sporting Goods, Michaels, Kohls, Dillards, At Home, Vitamin Shoppe, eBay, Randalls, Family Dollar, Container Store, Camping World, Finish Line, Specs, HMart, Fiesta Market, El Rancho, Wild Fork, Restaurant Depot, 99 Ranch, Georgetown Market, Harvest Market, The Fresh Market, Meijer, Fresh Thyme, Market District, Sur La Table, Foot Locker, Macys, Erewhon, Co-opportunity Market, Gelsons, Ralphs, Food4Less, Vons, Albertsons, Pavilions, Northgate Market, Super King, El Super, Bristol Farms, Lazy Acres, Petco, Petsmart, Smart and Final, Smart & Final, Mother’s Market, Jons Fresh Marketplace, Seafood City Supermarket, Grocery Outlet, Western Kosher, Pet Food Express, BevMo, Mitsuwa Marketplace, Tokyo Central, and other relevant stores from the list. Only include stores that very likely carry this specific product based on their known inventory. Do not include a store if there is reasonable doubt they carry it. Fewer accurate results are better than more inaccurate ones.
 
 ${priceInstruction}
 ${sortInstruction}
@@ -103,7 +103,7 @@ Return ONLY a raw JSON array. Each object must have:
 - "inStock": true or false based on your best knowledge
 - "note": always include "Estimated price — click to search this store"
 
-Return 6-8 results. Return ONLY the JSON array, no markdown.`;
+Return 6-12 results. Return ONLY the JSON array, no markdown.`;
 
     const requestBody = JSON.stringify({
       model: 'claude-sonnet-4-5',
