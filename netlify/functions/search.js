@@ -54,7 +54,7 @@ exports.handler = async function(event) {
   'Fresh Thyme': `https://www.freshthyme.com/search?q=${encodedQuery}`,
   'Market District': `https://www.marketdistrict.com/search?q=${encodedQuery}`,
   'Sur La Table': `https://www.surlatable.com/search?q=${encodedQuery}`,    
-};
+   };
 
     const priceInstruction = maxPrice ? `Only include results priced under $${maxPrice}.` : '';
     const sortInstruction = sortBy === 'price'
