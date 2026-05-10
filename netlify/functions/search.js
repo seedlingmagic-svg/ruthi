@@ -58,7 +58,7 @@ exports.handler = async function(event) {
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message })
+      body: JSON.stringify({ error: err.message, stack: err.stack, key_exists: !!process.env.ANTHROPIC_API_KEY })
     };
   }
 };
