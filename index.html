@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ruthi — Your Shopping Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --accent: #4A9EFF;
+    --bg: #0A1628;
+    --surface: #162440;
+    --surface2: #1e2e50;
+    --border: #1e3a60;
+    --text: #ffffff;
+    --muted: #a8c4d8;
+    --cream: #e0eeff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+    overflow-x: hidden;
+  }
+  .glow {
+    position: fixed;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(74,158,255,0.10) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 52px 24px 32px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 7vw, 64px);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+  .tagline {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .search-wrap {
+    max-width: 640px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .search-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .search-input {
+    flex: 1;
+    padding: 15px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(74,158,255,0.15);
+  }
+  .search-input::placeholder { color: #3a5070; }
+  .search-btn {
+    padding: 15px 26px;
+    background: var(--accent);
+    border: none;
+    border-radius: 14px;
+    color: #000;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .search-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .search-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .filter-select {
+    padding: 8px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--cream);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+  }
+  .status-bar {
+    text-align: center;
+    min-height: 32px;
+    margin: 24px auto 4px;
+    font-size: 14px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 640px;
+    padding: 0 20px;
+  }
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(74,158,255,0.25);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+    flex-shrink: 0;
+  }
+  .spinner.active { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .results-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+  .results-count { font-size: 13px; color: var(--muted); }
+  .results-note { font-size: 12px; color: var(--muted); font-style: italic; }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    animation: fadeUp 0.3s ease both;
+    cursor: pointer;
+  }
+  .result-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    background: var(--surface2);
+  }
+  .result-card.best {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rank {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--border);
+    min-width: 26px;
+    text-align: center;
+  }
+  .result-card.best .rank { color: var(--accent); }
+  .result-info { flex: 1; min-width: 0; }
+  .result-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .result-meta {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .result-note { font-size: 11px; color: #3a6090; margin-top: 2px; }
+  .result-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .result-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .result-card.best .result-price { color: var(--accent); }
+  .badge {
+    background: var(--accent);
+    color: #000;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .open-arrow { font-size: 12px; color: var(--accent); opacity: 0; transition: opacity 0.2s; }
+  .result-card:hover .open-arrow { opacity: 1; }
+  .empty-state { text-align: center; padding: 56px 20px; color: var(--muted); }
+  .empty-icon { font-size: 44px; margin-bottom: 14px; }
+  .empty-title { font-size: 18px; color: #2a4060; margin-bottom: 6px; }
+  .divider {
+    max-width: 720px;
+    margin: 36px auto 24px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .launchers-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .launchers-title { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .launchers-grid { display: flex; flex-wrap: wrap; gap: 9px; }
+  .launcher-btn {
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--cream);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .launcher-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  footer { text-align: center; margin-top: 60px; font-size: 12px; color: #a8c4d8; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<header>
+  <div class="eyebrow">Your Personal Shopping Assistant</div>
+  <h1>Ruthi</h1>
+  <p class="tagline">One search. Every store. Every price.</p>
+</header>
+<div class="search-wrap">
+  <div class="search-row">
+    <input class="search-input" id="queryInput" type="text"
+      placeholder="e.g. Icelandic Glacial water 1.5L case of 12"
+      onkeydown="if(event.key==='Enter') doSearch()"/>
+    <button class="search-btn" id="searchBtn" onclick="doSearch()">Search</button>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Max Price:</span>
+    <select class="filter-select" id="maxPrice">
+      <option value="">Any price</option>
+      <option value="20">Under $20</option>
+      <option value="30">Under $30</option>
+      <option value="33" selected>Under $33</option>
+      <option value="50">Under $50</option>
+      <option value="75">Under $75</option>
+      <option value="100">Under $100</option>
+    </select>
+    <span class="filter-label" style="margin-left:8px">Sort:</span>
+    <select class="filter-select" id="sortBy">
+      <option value="price">Lowest Price First</option>
+      <option value="relevance">Relevance</option>
+    </select>
+  </div>
+</div>
+<div class="status-bar">
+  <div class="spinner" id="spinner"></div>
+  <span id="statusText"></span>
+</div>
+<div class="results-wrap" id="resultsWrap"></div>
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-text">Search a specific store directly</div>
+  <div class="divider-line"></div>
+</div>
+<div class="launchers-wrap">
+  <p class="launchers-title">Type your product above, then click any store to open it directly:</p>
+  <div class="launchers-grid" id="launchersGrid"></div>
+</div>
+<footer>Ruthi &nbsp;·&nbsp; Powered by AI</footer>
+<script>
+  const STORES = [
+    { name: 'Amazon',      icon: '📦', url: q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}` },
+    { name: 'Walmart',     icon: '🏪', url: q => `https://www.walmart.com/search?q=${encodeURIComponent(q)}` },
+    { name: 'Target',      icon: '🎯', url: q => `https://www.target.com/s?searchTerm=${encodeURIComponent(q)}` },
+    { name: 'Whole Foods', icon: '🥦', url: q => `https://www.wholefoodsmarket.com/search?text=${encodeURIComponent(q)}` },
+    { name: 'Sprouts',     icon: '🌱', url: q => `https://www.sprouts.com/search/?q=${encodeURIComponent(q)}` },
+    { name: 'Costco',      icon: '🏬', url: q => `https://www.costco.com/CatalogSearch?keyword=${encodeURIComponent(q)}` },
+    { name: 'eBay',        icon: '🔍', url: q => `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(q)}` },
+    { name: 'Google Shop', icon: '🛍️', url: q => `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(q)}` },
+  ];
+
+  const grid = document.getElementById('launchersGrid');
+  STORES.forEach(store => {
+    const btn = document.createElement('button');
+    btn.className = 'launcher-btn';
+    btn.innerHTML = `<span>${store.icon}</span>${store.name}`;
+    btn.onclick = () => {
+      const q = document.getElementById('queryInput').value.trim() || 'product';
+      window.open(store.url(q), '_blank');
+    };
+    grid.appendChild(btn);
+  });
+
+  async function doSearch() {
+    const query = document.getElementById('queryInput').value.trim();
+    if (!query) return;
+
+    const maxPrice = document.getElementById('maxPrice').value;
+    const sortBy = document.getElementById('sortBy').value;
+
+    setStatus('Searching across stores...', true);
+    document.getElementById('searchBtn').disabled = true;
+    document.getElementById('resultsWrap').innerHTML = '';
+
+    try {
+      const response = await fetch('/.netlify/functions/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, maxPrice, sortBy })
+      });
+
+      let results = await response.json();
+
+      if (results.error) throw new Error(results.error);
+
+      if (maxPrice) results = results.filter(r => parseFloat(r.price) <= parseFloat(maxPrice));
+      if (sortBy === 'price') results.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+
+      renderResults(results, query);
+      setStatus(`Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`, false);
+    } catch (err) {
+      setStatus('Something went wrong — please try again.', false);
+      console.error(err);
+    }
+
+    document.getElementById('searchBtn').disabled = false;
+  }
+
+  function renderResults(results, query) {
+    const wrap = document.getElementById('resultsWrap');
+    if (!results || !results.length) {
+      wrap.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results found</div><div class="empty-sub">Try adjusting your search or price filter</div></div>`;
+      return;
+    }
+    const hdr = document.createElement('div');
+    hdr.className = 'results-header';
+    hdr.innerHTML = `<span class="results-count">${results.length} results</span><span class="results-note">Click any result to open that store</span>`;
+    wrap.appendChild(hdr);
+    results.forEach((r, i) => {
+      const isBest = i === 0;
+      const card = document.createElement('a');
+      card.className = 'result-card' + (isBest ? ' best' : '');
+      card.href = r.url || '#';
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.style.animationDelay = `${i * 0.055}s`;
+      const stockColor = r.inStock ? '#4A9EFF' : '#3a5070';
+      const stockLabel = r.inStock ? '● In Stock' : '○ Check availability';
+      card.innerHTML = `
+        <div class="rank">${i + 1}</div>
+        <div class="result-info">
+          <div class="result-title">${r.title}</div>
+          <div class="result-meta">${r.store}${r.unit ? ' · ' + r.unit : ''}</div>
+          ${r.note ? `<div class="result-note">${r.note}</div>` : ''}
+          <div style="font-size:11px;color:${stockColor};margin-top:4px">${stockLabel}</div>
+        </div>
+        <div class="result-right">
+          <div class="result-price">$${parseFloat(r.price).toFixed(2)}</div>
+          ${isBest ? '<span class="badge">Best Price</span>' : ''}
+          <span class="open-arrow">Open →</span>
+        </div>`;
+      wrap.appendChild(card);
+    });
+  }
+
+  function setStatus(msg, loading) {
+    document.getElementById('statusText').textContent = msg;
+    document.getElementById('spinner').classList.toggle('active', loading);
+  }
+</script>
+</body>
+</html>
