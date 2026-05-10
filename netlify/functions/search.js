@@ -6,6 +6,7 @@ exports.handler = async function(event) {
   }
 
   try {
+    if (!process.env.ANTHROPIC_API_KEY) { return { statusCode: 500, body: JSON.stringify({ error: 'API key not found in environment' }) }; }
     const { query, maxPrice, sortBy } = JSON.parse(event.body);
 
     const priceInstruction = maxPrice ? `Only include results priced under $${maxPrice}.` : '';
