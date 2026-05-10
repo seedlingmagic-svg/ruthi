@@ -17,7 +17,7 @@ exports.handler = async function(event) {
     const prompt = `You are a price comparison assistant. The user is searching for: "${query}". Find this product across major retailers: Amazon, Walmart, Target, Whole Foods, Sprouts, Costco, and eBay. ${priceInstruction} ${sortInstruction} Return ONLY a raw JSON array. Each object must have: "store", "title", "price" (number only), "unit", "url", "inStock" (true/false), "note". Provide realistic estimates if exact prices unknown, note "Estimated price" in note field. Return 6-8 results. Return ONLY the JSON array.`;
 
     const requestBody = JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5',
       max_tokens: 1000,
       messages: [{ role: 'user', content: prompt }]
     });
