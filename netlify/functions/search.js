@@ -24,7 +24,7 @@ exports.handler = async function(event) {
   'Sams Club': `https://www.samsclub.com/s/${encodedQuery}`,
   'Walgreens': `https://www.walgreens.com/search/results.jsp?Ntt=${encodedQuery}`,
   'CVS': `https://www.cvs.com/search/${encodedQuery}`,
-  'Dollar Tree': `https://www.dollartree.com/search?q=${encodedQuery}`,
+  'Dollar Tree': `https://www.dollartree.com/search/results/${encodedQuery}`,
   'Family Dollar': `https://www.familydollar.com/search?q=${encodedQuery}`,
   'Best Buy': `https://www.bestbuy.com/site/searchpage.jsp?st=${encodedQuery}`,
   'Staples': `https://www.staples.com/search?query=${encodedQuery}`,
@@ -56,7 +56,7 @@ exports.handler = async function(event) {
 
     const prompt = `You are a price comparison assistant. The user is searching for: "${query}".
 
-Provide estimated prices for this product at the most relevant retailers from this list: Amazon, Walmart, Target, HEB, Kroger, Sprouts, Whole Foods, Central Market, Costco, Sams Club, Best Buy, Home Depot, Lowes, CVS, Walgreens, Dollar Tree, Dicks Sporting Goods, Michaels, Kohls, Vitamin Shoppe, eBay, and other relevant stores from the list. Only include stores that would realistically carry the searched product.
+Provide estimated prices for this product at the most relevant retailers from this list: Amazon, Walmart, Target, HEB, Kroger, Sprouts, Whole Foods, Central Market, Costco, Sams Club, Best Buy, Home Depot, Lowes, CVS, Walgreens, Dollar Tree, Dicks Sporting Goods, Michaels, Kohls, Vitamin Shoppe, eBay, and other relevant stores from the list. Only include stores that very likely carry this specific product based on their known inventory. Do not include a store if there is reasonable doubt they carry it. Fewer accurate results are better than more inaccurate ones.
 
 ${priceInstruction}
 ${sortInstruction}
